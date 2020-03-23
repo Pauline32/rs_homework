@@ -1,0 +1,28 @@
+Thinking1：什么是近似最近邻查找，常用的方法有哪些
+近似最近邻检索，在牺牲可接受范围内的精度的情况下提高检索效率
+LSH，局部敏感哈希是ANN的一种
+
+Thinking2：为什么两个集合的minhash值相同的概率等于这两个集合的Jaccard相似度
+假设两个集合Ci与Cj，对应的行有三种可能：
+A类：两列的值都为1；
+B类：其中一列的值为0，另一列的值为1；
+C类：两列的值都为0.
+P(h(Ci)=h(Cj))=P(删掉C类后，第一行为A类)=A类行的个数/所有行的个数=a/(a+b)=两个集合的Jaccard相似度
+
+Thinking3：SimHash在计算文档相似度的作用是怎样的？
+SimHash算法：
+#通过SimHash算法得到每篇文档的指纹（fingerprint）
+Step1，设置SimHash的位数，比如32位，需要综合考虑存储成本以及数据集的大小
+Step2，初始化SimHash，将各位初始化为0 
+Step3，提取文本中的特征，比如采用2-Shingles
+Step4，使用传统的hash函数计算各个word的hashcode
+Step5，对各word的hashcode的每一位，如果该位为1，则simhash相应位的值加它的权重（通常是出现的频率）；否则减它的权重 
+Step6，计算最后得到的32位的SimHash，如果该位大于1，则设为1；否则设为0 
+#计算两个文档指纹的海明距离，通常2篇文档的Hamming距离在3以内，就认为相似度比较高 => 两篇文档基本相同
+
+Thinking4：为什么YouTube采用期望观看时间作为评估指标
+CTR指标对于视频搜索具有一定的欺骗性，所以论文提出采用期望观看时间作为评估指标
+
+Thinking5：为什么YouTube在排序阶段没有采用经典的LR（逻辑回归）当作输出层，而是采用了Weighted Logistic Regression？
+观看时长不是只有0，1两种标签，所以YouTube采用了Weighted Logistic Regression来模拟这个输出
+

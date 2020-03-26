@@ -1,0 +1,13 @@
+java -jar RankLib-patched.jar -train MQ2008/Fold1/train.txt -test MQ2008/Fold1/test.txt -validate MQ2008/Fold1/vali.txt -ranker 6 -metric2t NDCG@10 -metric2T NDCG@10 -save LambdaMART.txt
+
+java -jar RankLib-patched.jar -train MQ2008/Fold1/train.txt -test MQ2008/Fold1/test.txt -validate MQ2008/Fold1/vali.txt -ranker 1 -metric2t NDCG@10 -metric2T NDCG@10 -save RankNet.txt
+
+java -jar RankLib-patched.jar -train MQ2008/Fold1/train.txt -test MQ2008/Fold1/test.txt -validate MQ2008/Fold1/vali.txt -ranker 1 -metric2t NDCG@10 -metric2T NDCG@10 -save ListNet.txt
+
+java -jar RankLib-patched.jar -load RankNet.txt -test MQ2008/Fold1/test.txt -metric2T NDCG@10 -idv output/ranknet.ndcg.txt
+
+java -jar RankLib-patched.jar -load LambdaMART.txt -test MQ2008/Fold1/test.txt -metric2T NDCG@10 -idv output/LambdaMART.ndcg.txt
+
+java -jar RankLib-patched.jar -load ListNet.txt -test MQ2008/Fold1/test.txt -metric2T NDCG@10 -idv output/ListNet.ndcg.txt
+
+java -cp RankLib-patched.jar ciir.umass.edu.eval.Analyzer -all output/ -base baseline.ndcg.txt > analysis.txt

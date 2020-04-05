@@ -1,0 +1,43 @@
+Thinking1：电商定向广告和搜索广告有怎样的区别，算法模型是否有差别
+电商定向广告用户没有很明显的意图（主动的Query查询），而搜索广告是有明显意图的。
+电商定向广告模型是在用户特征，上下文场景下预测用户点击候选广告的概率。
+搜索广告的算法模型关注和Query相关的候选广告集的排序，把最相关的广告排在第一位。
+
+Thinking2：定向广告都有哪些常见的使用模型，包括Attention机制模型
+LR，MLR, DNN,DIN, DIEN,DSIN
+
+Thinking3:DIN中的Attention机制思想和原理是怎样的
+Attention机制：
+在对用户行为的embedding计算上引入了attention network (也称为Activation Unit) 
+把用户历史行为特征进行embedding操作，视为对用户兴趣的表示，之后通过Attention Unit，对每个兴趣表示赋予不同的权值
+Attention Weight是由用户历史行为和候选广告进行匹配计算得到的，对应着洞察（用户兴趣的Diversity，以及Local Activation）
+Attention思想：在pooling的时候，与 candidate Ad 相关的商品权重大一些，与candidate Ad 不相关的商品权重小一些
+Attention分数，将candidate Ad与历史行为的每个商品发生交互来计算
+Activation Unit输出Activation Weight，输入包括用户行为embedding和候选广告embedding以外，还考虑了他们两个的外积。
+对于不同的candidate ad，得到的用户行为表示向量也不同
+
+Thinking4:DIEN相比于DIN有哪些创新
+DIN的不足：
+利用用户行为序列特征，直接把用户历史行为当做兴趣
+直接用行为表示兴趣可能存在问题。因为行为是序列化产生的，行为之间存在依赖关系，比如当前时刻的兴趣往往直接导致了下一行为的发生
+用户的兴趣是不断进化的，而DIN抽取的用户兴趣之间是独立无关联的，没有捕获到兴趣的动态进化性，比如用户对衣服的喜好，会随季节、
+时尚风潮以及个人品味的变化而变化，呈现一种连续的变迁趋势。
+DIEN结构：
+通过引入序列模型 AUGRU 模拟了用户兴趣进化的过程
+在 Embedding layer 和 Concatenate layer 之间加入了生成兴趣的 Interest Extractor Layer 和模拟兴趣演化的 Interest Evolving layer
+Interest Extractor Layer 使用了GRU的结构抽取了每一个时间片内用户的兴趣
+Interest Evolving layer 利用序列模型 AUGRU 的结构将不同时间的用户兴趣串联起来，形成兴趣进化的链条
+最终把当前时刻的“兴趣向量”输入上层的多层全连接网络，与其他特征一起进行最终的 CTR 预估
+
+Thinking5:DSIN关于Session的洞察是怎样的，如何对Session兴趣进行表达
+将用户的连续行为自然地划分为Session，通过带有偏置编码的self attention网络对每个会话进行建模
+使用BI-LSTM捕捉用户不同历史会话兴趣的交互和演变
+设计了两个Activation Unit，将它们与目标item聚合起来，形成行为序列的最终表示形式
+
+Thinking6:如果你来设计淘宝定向广告，会有哪些future work（即下一个阶段的idea）
+购买的产品用户不一定都满意，可以把用户对商家的评价作为正反馈和负反馈加进来。
+
+
+
+
+
